@@ -13,6 +13,7 @@ import '../../../core/services/prompt_enhancer_service.dart';
 import '../../../core/services/ad_service.dart';
 import '../../../core/services/pdf_service.dart';
 import '../../../shared/widgets/prompt_enhancer.dart';
+import '../../../shared/widgets/extension_popup_sheet.dart';
 
 class ChatInput extends StatefulWidget {
   final TextEditingController? controller;
@@ -592,6 +593,7 @@ class _ChatInputState extends State<ChatInput> with TickerProviderStateMixin {
           });
           Navigator.pop(context);
         },
+        onExtensionPopup: _showExtensionPopup,
       ),
     );
   }
@@ -784,6 +786,15 @@ class _ChatInputState extends State<ChatInput> with TickerProviderStateMixin {
     _updateSendButton();
   }
 
+  void _showExtensionPopup(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) => const ExtensionPopupSheet(),
+    );
+  }
+
   IconData _getButtonIcon() {
     if (widget.isLoading) {
       return Icons.stop_rounded;
@@ -847,6 +858,7 @@ class _ExtensionsBottomSheet extends StatelessWidget {
   final Function(bool) onFlashcardToggle;
   final Function(bool) onQuizToggle;
   final VoidCallback onEnhancePrompt;
+  final Function(BuildContext) onExtensionPopup;
 
   const _ExtensionsBottomSheet({
     required this.imageGenerationMode,
@@ -864,6 +876,7 @@ class _ExtensionsBottomSheet extends StatelessWidget {
     required this.onFlashcardToggle,
     required this.onQuizToggle,
     required this.onEnhancePrompt,
+    required this.onExtensionPopup,
   });
 
   @override
@@ -890,7 +903,7 @@ class _ExtensionsBottomSheet extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
-                // First row - File operations only
+                // First row - File operations and Extensions
                 Row(
                   children: [
                     Expanded(
@@ -906,6 +919,14 @@ class _ExtensionsBottomSheet extends StatelessWidget {
                         icon: CupertinoIcons.folder,
                         title: 'Upload File',
                         onTap: onPdfUpload,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _CompactExtensionTile(
+                        icon: CupertinoIcons.gear_alt,
+                        title: 'Extensions',
+                        onTap: () => onExtensionPopup(context),
                       ),
                     ),
                   ],

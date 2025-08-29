@@ -268,26 +268,13 @@ class _SignUpPageState extends State<SignUpPage> with TickerProviderStateMixin {
                         
                         // App Name
                         Center(
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: 'अहम्',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 36,
-                                    fontWeight: FontWeight.w600,
-                                    color: theme.colorScheme.onBackground,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: 'AI',
-                                  style: GoogleFonts.inter(
-                                    fontSize: 34,
-                                    fontWeight: FontWeight.w700,
-                                    color: theme.colorScheme.primary,
-                                  ),
-                                ),
-                              ],
+                          child: Text(
+                            'AhamAI',
+                            style: GoogleFonts.orbitron(
+                              fontSize: 36,
+                              fontWeight: FontWeight.w600,
+                              color: theme.colorScheme.primary,
+                              letterSpacing: -0.5,
                             ),
                           ),
                         ),

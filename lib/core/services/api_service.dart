@@ -3,6 +3,8 @@ import 'dart:io';
 import 'dart:async';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'settings_service.dart';
+import 'brave_search_service.dart';
 
 class ApiService {
   static const String baseUrl = 'https://ahamai-api.officialprakashkrsingh.workers.dev';
@@ -62,70 +64,94 @@ class ApiService {
     try {
       final messages = <Map<String, dynamic>>[];
       
-      // Add system prompt if provided
+      // Add system prompt with current time information
+      final currentTime = DateTime.now();
+      final timeInfo = 'Current date and time: ${currentTime.toString().substring(0, 19)} UTC';
+      String finalSystemPrompt = timeInfo;
+      
       if (systemPrompt != null && systemPrompt.isNotEmpty) {
-        messages.add({
-          'role': 'system',
-          'content': systemPrompt,
-        });
+        finalSystemPrompt += '\n\n$systemPrompt';
       }
+      
+      messages.add({
+        'role': 'system',
+        'content': finalSystemPrompt,
+      });
       
       // Add conversation history
       if (conversationHistory != null) {
         messages.addAll(conversationHistory);
       }
       
+      // Check if web search is enabled and add search context
+      String finalMessage = message;
+      if (SettingsService.instance.webSearchEnabled) {
+        try {
+          final searchContext = await BraveSearchService.instance.getSearchContext(message);
+          if (searchContext != null) {
+            finalMessage = '$searchContext\n\nUser query: $message\n\nPlease use the above web search results to provide current, accurate information in your response.';
+          }
+        } catch (e) {
+          print('Web search failed, proceeding without: $e');
+        }
+      }
+      
       // Add current message
       messages.add({
         'role': 'user',
-        'content': message,
+        'content': finalMessage,
       });
+
+      final List<Map<String, dynamic>> tools = [
+        {
+          'type': 'function',
+          'function': {
+            'name': 'generate_image',
+            'description': 'Generate an image based on a user prompt. Use this when the user asks to create, draw, or generate a picture, image, or art.',
+            'parameters': {
+              'type': 'object',
+              'properties': {
+                'prompt': {
+                  'type': 'string',
+                  'description': 'A detailed description of the image to generate.',
+                },
+                'model': {
+                  'type': 'string',
+                  'description': 'The specific model to use for generation, if the user requests one.',
+                }
+              },
+              'required': ['prompt'],
+            },
+          }
+        },
+      ];
+      
+      if (SettingsService.instance.webSearchEnabled) {
+        tools.add({
+          'type': 'function',
+          'function': {
+            'name': 'web_search',
+            'description': 'Search the web for up-to-date information on a topic, including news and images.',
+            'parameters': {
+              'type': 'object',
+              'properties': {
+                'query': {
+                  'type': 'string',
+                  'description': 'The search query or topic.',
+                }
+              },
+              'required': ['query'],
+            },
+          }
+        });
+      }
 
       final requestBody = {
         'model': model,
         'messages': messages,
         'stream': true,
         'temperature': 0.7,
-        'tools': [
-          {
-            'type': 'function',
-            'function': {
-              'name': 'generate_image',
-              'description': 'Generate an image based on a user prompt. Use this when the user asks to create, draw, or generate a picture, image, or art.',
-              'parameters': {
-                'type': 'object',
-                'properties': {
-                  'prompt': {
-                    'type': 'string',
-                    'description': 'A detailed description of the image to generate.',
-                  },
-                  'model': {
-                    'type': 'string',
-                    'description': 'The specific model to use for generation, if the user requests one.',
-                  }
-                },
-                'required': ['prompt'],
-              },
-            }
-          },
-          {
-            'type': 'function',
-            'function': {
-              'name': 'web_search',
-              'description': 'Search the web for up-to-date information on a topic, including news and images.',
-              'parameters': {
-                'type': 'object',
-                'properties': {
-                  'query': {
-                    'type': 'string',
-                    'description': 'The search query or topic.',
-                  }
-                },
-                'required': ['query'],
-              },
-            }
-          }
-        ]
+        'tools': tools
       };
 
       final request = http.Request(

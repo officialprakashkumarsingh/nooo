@@ -1222,9 +1222,9 @@ class _ExportMessageWidget extends StatelessWidget {
                       ),
                       TextSpan(
                         text: 'AI',
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.orbitron(
                           fontSize: 22,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           color: theme.colorScheme.primary,
                         ),
                       ),
@@ -1315,9 +1315,9 @@ class _ExportMessageWidget extends StatelessWidget {
                 child: Center(
                   child: Text(
                     'AI',
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.orbitron(
                       fontSize: 12,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       color: theme.colorScheme.primary,
                     ),
                   ),

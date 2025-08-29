@@ -1286,43 +1286,24 @@ class _AboutBottomSheetState extends State<_AboutBottomSheet> {
                           shape: BoxShape.circle,
                         ),
                         child: Center(
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: 'अ',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 32,
-                                    fontWeight: FontWeight.w600,
-                                    color: theme.colorScheme.primary,
-                                  ),
-                                ),
-                              ],
+                          child: Text(
+                            'A',
+                            style: GoogleFonts.orbitron(
+                              fontSize: 32,
+                              fontWeight: FontWeight.w600,
+                              color: theme.colorScheme.primary,
                             ),
                           ),
                         ),
                       ),
                       const SizedBox(height: 16),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'अहम्',
-                              style: GoogleFonts.poppins(
-                                fontSize: 28,
-                                fontWeight: FontWeight.w600,
-                                color: theme.colorScheme.onSurface,
-                              ),
-                            ),
-                            TextSpan(
-                              text: 'AI',
-                              style: GoogleFonts.inter(
-                                fontSize: 26,
-                                fontWeight: FontWeight.w700,
-                                color: theme.colorScheme.primary,
-                              ),
-                            ),
-                          ],
+                      Text(
+                        'AhamAI',
+                        style: GoogleFonts.orbitron(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: -0.5,
+                          color: theme.colorScheme.primary,
                         ),
                       ),
                       const SizedBox(height: 4),

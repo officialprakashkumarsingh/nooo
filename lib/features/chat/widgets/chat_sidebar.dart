@@ -423,9 +423,13 @@ class _ChatSidebarState extends State<ChatSidebar> with SingleTickerProviderStat
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
-                        onTap: () {
+                        onTap: () async {
                           widget.onNewChat();
-                          Navigator.pop(context);
+                          // Add a small delay to allow UI transition to settle
+                          await Future.delayed(const Duration(milliseconds: 100));
+                          if (context.mounted) {
+                            Navigator.pop(context);
+                          }
                         },
                         borderRadius: BorderRadius.circular(25),
                         child: Container(
@@ -660,9 +664,13 @@ class _ChatSidebarState extends State<ChatSidebar> with SingleTickerProviderStat
                                         : Colors.transparent,
                                     borderRadius: BorderRadius.circular(8),
                                                                 child: InkWell(
-                                  onTap: () {
+                                  onTap: () async {
                                     widget.onSessionSelected(session.id);
-                                    Navigator.pop(context);
+                                    // Add a small delay to allow UI transition to settle
+                                    await Future.delayed(const Duration(milliseconds: 100));
+                                    if (context.mounted) {
+                                      Navigator.pop(context);
+                                    }
                                   },
                                   onLongPress: () {
                                     _showSessionOptions(context, session);
