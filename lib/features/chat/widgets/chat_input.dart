@@ -593,6 +593,7 @@ class _ChatInputState extends State<ChatInput> with TickerProviderStateMixin {
           });
           Navigator.pop(context);
         },
+        onExtensionPopup: _showExtensionPopup,
       ),
     );
   }
@@ -857,6 +858,7 @@ class _ExtensionsBottomSheet extends StatelessWidget {
   final Function(bool) onFlashcardToggle;
   final Function(bool) onQuizToggle;
   final VoidCallback onEnhancePrompt;
+  final Function(BuildContext) onExtensionPopup;
 
   const _ExtensionsBottomSheet({
     required this.imageGenerationMode,
@@ -874,6 +876,7 @@ class _ExtensionsBottomSheet extends StatelessWidget {
     required this.onFlashcardToggle,
     required this.onQuizToggle,
     required this.onEnhancePrompt,
+    required this.onExtensionPopup,
   });
 
   @override
@@ -923,7 +926,7 @@ class _ExtensionsBottomSheet extends StatelessWidget {
                       child: _CompactExtensionTile(
                         icon: CupertinoIcons.gear_alt,
                         title: 'Extensions',
-                        onTap: () => _showExtensionPopup(context),
+                        onTap: () => onExtensionPopup(context),
                       ),
                     ),
                   ],

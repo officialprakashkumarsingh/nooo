@@ -64,7 +64,7 @@ class BraveSearchService {
 
   Future<Map<String, dynamic>?> _makeSearchRequest(String query, String apiKey) async {
     final encodedQuery = Uri.encodeComponent(query);
-    final url = 'https://api.search.brave.com/res/v1/web/search?q=$encodedQuery&count=5&freshness=pd&safesearch=moderate';
+    final url = 'https://api.search.brave.com/res/v1/web/search?q=$encodedQuery&count=25&freshness=pd&safesearch=moderate';
 
     final response = await http.get(
       Uri.parse(url),
@@ -107,7 +107,7 @@ class BraveSearchService {
       buffer.writeln('Recent web search results:');
       buffer.writeln();
       
-      for (int i = 0; i < webResults.length && i < 5; i++) {
+      for (int i = 0; i < webResults.length && i < 25; i++) {
         final result = webResults[i];
         final title = result['title'] ?? 'No title';
         final description = result['description'] ?? 'No description';
