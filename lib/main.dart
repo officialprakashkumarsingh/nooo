@@ -7,6 +7,8 @@ import 'core/services/app_service.dart';
 import 'core/services/model_service.dart';
 import 'core/services/speech_service.dart';
 import 'core/services/tts_service.dart';
+import 'core/services/settings_service.dart';
+import 'core/services/brave_search_service.dart';
 import 'theme/providers/theme_provider.dart';
 import 'features/splash/pages/splash_page.dart';
 import 'utils/app_scroll_behavior.dart';
@@ -20,6 +22,14 @@ void main() async {
   // Initialize core services
   await AppService.initialize();
   await SpeechService.instance.initialize();
+  await SettingsService.instance.initialize();
+  
+  // Initialize Brave Search Service
+  try {
+    BraveSearchService.instance.initialize();
+  } catch (e) {
+    print('Warning: Brave Search service initialization failed: $e');
+  }
 
   // Initialize theme provider before running the app
   final themeProvider = ThemeProvider();

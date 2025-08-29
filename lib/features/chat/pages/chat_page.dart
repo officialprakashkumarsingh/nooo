@@ -883,29 +883,30 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Future<void> _regenerateMessage(int messageIndex) async {
-    // This logic is tricky with a reversed list. For now, we'll simplify
-    // by clearing the last response and re-sending.
+    // Find the user message before this assistant message
     if (messageIndex <= 0 || messageIndex >= _messages.length) return;
 
-    final userMessage = _messages[messageIndex - 1];
-    if (userMessage.type != MessageType.user) return;
+    final assistantMessage = _messages[messageIndex];
+    if (assistantMessage.type != MessageType.assistant) return;
 
-    // Remove the assistant message(s) that follow the user message
-    int countToRemove = 0;
-    while (messageIndex < _messages.length && _messages[messageIndex].type == MessageType.assistant) {
-      final removedMessage = _messages.removeAt(messageIndex);
-      _listKey.currentState?.removeItem(
-        _messages.length - messageIndex, // Adjust index for reversed list
-        (context, animation) => _buildAnimatedMessage(removedMessage, 0, animation),
-        duration: const Duration(milliseconds: 300),
-      );
-      countToRemove++;
+    // Look for the user message that prompted this response
+    Message? userMessage;
+    for (int i = messageIndex - 1; i >= 0; i--) {
+      if (_messages[i].type == MessageType.user) {
+        userMessage = _messages[i];
+        break;
+      }
     }
 
-    if (countToRemove > 0) {
-      setState(() {});
-      await _handleSendMessage(userMessage.content);
-    }
+    if (userMessage == null) return;
+
+    // Remove the assistant message
+    setState(() {
+      _messages.removeAt(messageIndex);
+    });
+
+    // Re-send the user message to generate a new response
+    await _handleSendMessage(userMessage.content);
   }
 
   void _copyMessage(Message message) {

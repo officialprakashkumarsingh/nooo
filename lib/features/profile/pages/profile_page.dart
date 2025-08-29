@@ -1288,9 +1288,9 @@ class _AboutBottomSheetState extends State<_AboutBottomSheet> {
                         child: Center(
                           child: Text(
                             'A',
-                            style: GoogleFonts.inter(
+                            style: GoogleFonts.asimovian(
                               fontSize: 32,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w600,
                               color: theme.colorScheme.primary,
                             ),
                           ),
@@ -1299,9 +1299,9 @@ class _AboutBottomSheetState extends State<_AboutBottomSheet> {
                       const SizedBox(height: 16),
                       Text(
                         'AhamAI',
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.asimovian(
                           fontSize: 28,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           letterSpacing: -0.5,
                           color: theme.colorScheme.primary,
                         ),

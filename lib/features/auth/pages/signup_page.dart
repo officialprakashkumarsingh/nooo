@@ -270,9 +270,9 @@ class _SignUpPageState extends State<SignUpPage> with TickerProviderStateMixin {
                         Center(
                           child: Text(
                             'AhamAI',
-                            style: GoogleFonts.inter(
+                            style: GoogleFonts.asimovian(
                               fontSize: 36,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w600,
                               color: theme.colorScheme.primary,
                               letterSpacing: -0.5,
                             ),
