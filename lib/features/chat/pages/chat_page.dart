@@ -81,9 +81,14 @@ class _ChatPageState extends State<ChatPage> {
   }
   
   void _onSessionChanged() {
-    // Only reload if we're not currently sending a message
-    if (!_isLoading) {
-      _loadCurrentSession();
+    // Only reload if we're not currently sending a message and not already loading
+    if (!_isLoading && !_isLoadingHistory) {
+      // Use a microtask to ensure this runs after the current frame
+      Future.microtask(() {
+        if (mounted) {
+          _loadCurrentSession();
+        }
+      });
     }
   }
   
@@ -106,15 +111,15 @@ class _ChatPageState extends State<ChatPage> {
               _isLoadingHistory = false;
             });
             
-            // Scroll to bottom after loading messages
+            // Scroll to bottom after loading messages without animation for instant loading
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (_scrollController.hasClients && _messages.isNotEmpty) {
-                _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+                _scrollController.jumpTo(0.0); // For reversed list, 0.0 is bottom
               }
             });
           }
         } else {
-          // New session - clear messages
+          // New session - clear messages smoothly
           if (mounted) {
             setState(() {
               _messages.clear();
@@ -124,9 +129,11 @@ class _ChatPageState extends State<ChatPage> {
         }
       } catch (e) {
         print('Error loading session messages: $e');
-        setState(() {
-          _isLoadingHistory = false;
-        });
+        if (mounted) {
+          setState(() {
+            _isLoadingHistory = false;
+          });
+        }
       }
     }
   }
@@ -456,7 +463,9 @@ class _ChatPageState extends State<ChatPage> {
       key: _listKey,
       controller: _scrollController,
       reverse: true,
-      physics: const BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(
+        parent: AlwaysScrollableScrollPhysics(),
+      ),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       initialItemCount: _messages.length,
       itemBuilder: (context, index, animation) {
@@ -469,26 +478,38 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget _buildAnimatedMessage(Message message, int index, Animation<double> animation) {
     return FadeTransition(
-      opacity: animation,
+      opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
+        CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeOut,
+        ),
+      ),
       child: SlideTransition(
         position: Tween<Offset>(
-          begin: const Offset(0, 0.2),
+          begin: const Offset(0, 0.1),
           end: Offset.zero,
-        ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
+        ).animate(
+          CurvedAnimation(
+            parent: animation,
+            curve: Curves.easeOutCubic,
+          ),
+        ),
         child: Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: MessageBubble(
-            message: message,
-            modelName: ModelService.instance.selectedModel,
-            userMessage: message.type == MessageType.assistant && index > 0 && _messages[index - 1].type == MessageType.user
-                ? _messages[index - 1].content
-                : '',
-            aiModel: ModelService.instance.selectedModel,
-            onCopy: () => _copyMessage(message),
-            onRegenerate: message.type == MessageType.assistant
-                ? () => _regenerateMessage(index)
-                : null,
-            onExport: () => _exportMessage(message, index),
+          child: RepaintBoundary(
+            child: MessageBubble(
+              message: message,
+              modelName: ModelService.instance.selectedModel,
+              userMessage: message.type == MessageType.assistant && index > 0 && _messages[index - 1].type == MessageType.user
+                  ? _messages[index - 1].content
+                  : '',
+              aiModel: ModelService.instance.selectedModel,
+              onCopy: () => _copyMessage(message),
+              onRegenerate: message.type == MessageType.assistant
+                  ? () => _regenerateMessage(index)
+                  : null,
+              onExport: () => _exportMessage(message, index),
+            ),
           ),
         ),
       ),

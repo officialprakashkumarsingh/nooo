@@ -148,28 +148,13 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'अहम्',
-                          style: GoogleFonts.poppins(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.5,
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                        ),
-                        TextSpan(
-                          text: 'AI',
-                          style: GoogleFonts.inter(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: -0.5,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                      ],
+                  Text(
+                    'AhamAI',
+                    style: GoogleFonts.inter(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: -0.5,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                   const SizedBox(width: 4),
@@ -213,7 +198,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       ),
       body: FadeTransition(
         opacity: _fadeAnimation,
-        child: const ChatPage(),
+        child: RepaintBoundary(
+          child: const ChatPage(),
+        ),
       ),
     );
   }
