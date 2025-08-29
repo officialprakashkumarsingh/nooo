@@ -218,7 +218,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                         Center(
                           child: Text(
                             'AhamAI',
-                            style: GoogleFonts.asimovian(
+                            style: GoogleFonts.orbitron(
                               fontSize: 36,
                               fontWeight: FontWeight.w600,
                               color: theme.colorScheme.primary,

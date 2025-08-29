@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../services/settings_service.dart';
+import '../../core/services/settings_service.dart';
 
 class ExtensionPopupSheet extends StatefulWidget {
   const ExtensionPopupSheet({super.key});
@@ -95,7 +95,7 @@ class _ExtensionPopupSheetState extends State<ExtensionPopupSheet> {
                 const SizedBox(width: 12),
                 Text(
                   'Extensions',
-                  style: GoogleFonts.asimovian(
+                  style: GoogleFonts.orbitron(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                     color: theme.colorScheme.onSurface,

@@ -119,7 +119,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
                     )),
                     child: Text(
                       'AhamAI',
-                      style: GoogleFonts.asimovian(
+                      style: GoogleFonts.orbitron(
                         fontSize: 48,
                         fontWeight: FontWeight.w600,
                         letterSpacing: -1.0,

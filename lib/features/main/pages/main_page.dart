@@ -150,7 +150,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 children: [
                   Text(
                     'AhamAI',
-                    style: GoogleFonts.asimovian(
+                    style: GoogleFonts.orbitron(
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
                       letterSpacing: -0.5,

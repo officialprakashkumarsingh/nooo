@@ -1288,7 +1288,7 @@ class _AboutBottomSheetState extends State<_AboutBottomSheet> {
                         child: Center(
                           child: Text(
                             'A',
-                            style: GoogleFonts.asimovian(
+                            style: GoogleFonts.orbitron(
                               fontSize: 32,
                               fontWeight: FontWeight.w600,
                               color: theme.colorScheme.primary,
@@ -1299,7 +1299,7 @@ class _AboutBottomSheetState extends State<_AboutBottomSheet> {
                       const SizedBox(height: 16),
                       Text(
                         'AhamAI',
-                        style: GoogleFonts.asimovian(
+                        style: GoogleFonts.orbitron(
                           fontSize: 28,
                           fontWeight: FontWeight.w600,
                           letterSpacing: -0.5,
